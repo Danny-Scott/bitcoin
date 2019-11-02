@@ -9,8 +9,6 @@
 #include <scheduler.h>
 #include <txmempool.h>
 
-#include <list>
-#include <atomic>
 #include <future>
 #include <utility>
 
@@ -34,7 +32,7 @@ struct MainSignalsInstance {
     boost::signals2::signal<void (const std::shared_ptr<const CBlock> &)> BlockDisconnected;
     boost::signals2::signal<void (const CTransactionRef &)> TransactionRemovedFromMempool;
     boost::signals2::signal<void (const CBlockLocator &)> ChainStateFlushed;
-    boost::signals2::signal<void (const CBlock&, const CValidationState&)> BlockChecked;
+    boost::signals2::signal<void (const CBlock&, const BlockValidationState&)> BlockChecked;
     boost::signals2::signal<void (const CBlockIndex *, const std::shared_ptr<const CBlock>&)> NewPoWValidBlock;
 
     // We are not allowed to assume the scheduler only runs in one thread,
@@ -170,7 +168,7 @@ void CMainSignals::ChainStateFlushed(const CBlockLocator &locator) {
     });
 }
 
-void CMainSignals::BlockChecked(const CBlock& block, const CValidationState& state) {
+void CMainSignals::BlockChecked(const CBlock& block, const BlockValidationState& state) {
     m_internals->BlockChecked(block, state);
 }
 
